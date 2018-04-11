@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "gambit-discovery-service": "https://github.com/revaturelabs/gambit-discovery-service.git",
+    "gambit-gateway-service": "https://github.com/revaturelabs/gambit-gateway-service.git",
+    "gambit-user-service": "https://github.com/revaturelabs/gambit-user-service.git",
+    "gambit-batch-service": "https://github.com/revaturelabs/gambit-batch-service.git"
+  }
+}
