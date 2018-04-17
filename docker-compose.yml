@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  eureka:
+    image: gambit/gambit-discover-service
+    ports:
+    - 8761:8761
