@@ -2,10 +2,6 @@ version: '3'
 
 services:
   eureka:
-    image: gambit/gambit-discover-service
+    image: gambit/gambit-discovery-service
     ports:
     - 8761:8761
-
-networks:
-  core:
-    external: true
