@@ -5,3 +5,9 @@ services:
     image: gambit/gambit-discovery-service
     ports:
     - 8761:8761
+  zuul:
+    image: gambit/gambit-gateway-service
+    ports:
+    - 8765:8765
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
