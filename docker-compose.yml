@@ -5,3 +5,7 @@ services:
     image: gambit/gambit-discover-service
     ports:
     - 8761:8761
+
+networks:
+  core:
+    external: true
