@@ -1,6 +1,10 @@
 version: '3'
 
 services:
+  janus:
+    image: gambit/janus-server
+    ports:
+    - 80:80
   eureka:
     image: gambit/gambit-discovery-service
     ports:
