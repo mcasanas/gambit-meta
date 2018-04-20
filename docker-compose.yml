@@ -10,7 +10,7 @@ services:
     ports:
     - 8761:8761
   config:
-    image: gambit/gambit-config-service
+    image: gambit/gambit-configuration-service
     ports:
     - 8888:8888
   zuul:
