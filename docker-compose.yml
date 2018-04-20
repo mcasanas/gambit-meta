@@ -9,6 +9,10 @@ services:
     image: gambit/gambit-discovery-service
     ports:
     - 8761:8761
+  config:
+    image: gambit/gambit-config-service
+    ports:
+    - 8888:8888
   zuul:
     image: gambit/gambit-gateway-service
     ports:
