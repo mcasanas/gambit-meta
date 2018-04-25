@@ -9,6 +9,8 @@ services:
     image: gambit/gambit-discovery-service
     ports:
     - 8761:8761
+    environment:
+    - CONFIG_HOME=http://config:8888
   config:
     image: gambit/gambit-configuration-service
     ports:
@@ -19,9 +21,25 @@ services:
     - 10000:10000
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
   user:
     image: gambit/gambit-user-service
     ports:
     - 10001:10001
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+  batch:
+    image: gambit/gambit-batch-service
+    ports:
+    - 10002:10002
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+  skills:
+    image: gambit/gambit-skills-service
+    ports:
+    - 10004:10004
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
