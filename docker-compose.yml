@@ -43,7 +43,7 @@ services:
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
   skills:
-    image: gambit/gambit-skills-service
+    image: gambit/gambit-skill-service
     ports:
     - 10004:10004
     environment:
