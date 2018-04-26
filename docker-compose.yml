@@ -33,6 +33,7 @@ services:
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
   batch:
     image: gambit/gambit-batch-service
     ports:
@@ -40,6 +41,7 @@ services:
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
   skills:
     image: gambit/gambit-skills-service
     ports:
@@ -47,3 +49,4 @@ services:
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
