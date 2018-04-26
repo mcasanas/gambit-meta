@@ -15,6 +15,10 @@ services:
     image: gambit/gambit-configuration-service
     ports:
     - 8888:8888
+    environment:
+    - CONFIG_REPO_URL=https://github.com/palagnajr/gambit-configuration.git
+    - CONFIG_REPO_USERNAME=revature-github
+    - CONFIG_REPO_PASSWORD=p4ssw0rd
   zuul:
     image: gambit/gambit-gateway-service
     ports:
@@ -36,8 +40,8 @@ services:
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
-  skill:
-    image: gambit/gambit-skill-service
+  skills:
+    image: gambit/gambit-skills-service
     ports:
     - 10004:10004
     environment:
