@@ -36,8 +36,8 @@ services:
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
-  skills:
-    image: gambit/gambit-skills-service
+  skill:
+    image: gambit/gambit-skill-service
     ports:
     - 10004:10004
     environment:
