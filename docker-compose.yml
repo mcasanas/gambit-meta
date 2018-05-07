@@ -1,6 +1,6 @@
 version: '3'
 
-services:
+services:  
   janus:
     image: gambit/janus-server
     ports:
@@ -34,6 +34,12 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    links:
+    - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   batch:
     image: gambit/gambit-batch-service
     ports:
@@ -50,3 +56,74 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    
+    #Logging
+    fluentd:
+    image: captgriz/myfluentd
+    volumes:
+      - ~/logs:/fluentd/log
+    ports:
+      - "24224:24224"
+    deploy:
+      restart_policy:
+           condition: on-failure
+           delay: 20s
+           max_attempts: 3
+           window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s
+ 
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+    networks:
+      - net
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    logging:
+        driver: "json-file"
+        options:
+          max-size: 10M
+          max-file: "1"  
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s 
+      
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
+    networks:
+      - net
+    logging:
+        driver: "json-file"
+        options:
+           max-size: 10M
+           max-file: "1"        
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s
