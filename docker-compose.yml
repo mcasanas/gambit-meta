@@ -58,7 +58,7 @@ services:
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
     
     #Logging
-    fluentd:
+  fluentd:
     image: captgriz/myfluentd
     volumes:
       - ~/logs:/fluentd/log
