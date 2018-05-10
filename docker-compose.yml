@@ -1,23 +1,144 @@
 version: '3'
 
-services:
+services:  
   janus:
     image: gambit/janus-server
     ports:
-    - 80:80
+    - 80:8088
   eureka:
     image: gambit/gambit-discovery-service
     ports:
     - 8761:8761
+    environment:
+    - EUREKA_HOME=http://localhost:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+  config:
+    image: gambit/gambit-configuration-service
+    ports:
+    - 8888:8888
+    environment:
+    - CONFIG_REPO_URL=https://github.com/palagnajr/gambit-configuration.git
+    - CONFIG_REPO_USERNAME=revature-github
+    - CONFIG_REPO_PASSWORD=p4ssw0rd
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   zuul:
     image: gambit/gambit-gateway-service
     ports:
     - 10000:10000
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   user:
     image: gambit/gambit-user-service
     ports:
     - 10001:10001
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+  batch:
+    image: gambit/gambit-batch-service
+    ports:
+    - 10002:10002
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+  skills:
+    image: gambit/gambit-skill-service
+    ports:
+    - 10004:10004
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+    
+  #Logging
+  fluentd:
+    image: captgriz/myfluentd
+    volumes:
+      - ~/logs:/fluentd/log
+    ports:
+      - "24224:24224"
+    deploy:
+      restart_policy:
+           condition: on-failure
+           delay: 20s
+           max_attempts: 3
+           window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s
+ 
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    logging:
+        driver: "json-file"
+        options:
+          max-size: 10M
+          max-file: "1"  
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s 
+      
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
+    logging:
+        driver: "json-file"
+        options:
+           max-size: 10M
+           max-file: "1"        
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s
