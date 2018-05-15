@@ -75,6 +75,43 @@ services:
       driver: "fluentd"
       options:
         tag: gambit
+  questions:
+    image: gambit/gambit-question-service
+    ports:
+    - 10009:10009
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+  buckets:
+    image: gambit/gambit-bucket-service
+    ports:
+    - 10006:10006
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+  screening:
+    image: gambit/gambit-screening-service
+    ports:
+    - 10007:10007
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+
     
   #Logging
   fluentd:
