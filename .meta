@@ -8,7 +8,7 @@
     "gambit-config-server": "https://github.com/revalution/gambit-config-server.git",
     "gambit-question-service": "https://github.com/revalution/gambit-question-service.git",
     "gambit-location-service": "https://github.com/revalution/gambit-location-service.git",
-    "gambit-bucket-service": "https://github.com/revalution/gambit-bucket-service.git",
+    "gambit-bucket-service": "https://github.com/revalution/gambit-question-bucket-service.git",
     "gambit-screening-service": "https://github.com/revalution/gambit-screening-service.git"
   }
 }
