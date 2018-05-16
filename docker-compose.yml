@@ -112,6 +112,19 @@ services:
       options:
         tag: gambit
 
+  location:
+    image: gambit/gambit-location-service
+    ports:
+    - 10005:10005
+    environment:
+    - EUREKA_HOME=http://eureka:8761/eureka
+    - CONFIG_HOME=http://config:8888
+    - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+
     
   #Logging
   fluentd:
