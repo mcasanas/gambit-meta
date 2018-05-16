@@ -6,6 +6,7 @@
     "gambit-batch-service": "https://github.com/revalution/gambit-batch-service.git",
     "gambit-skills-service": "https://github.com/revalution/gambit-skills-service.git",
     "gambit-config-server": "https://github.com/revalution/gambit-config-server.git",
-    "gambit-question-service": "https://github.com/revalution/gambit-question-service.git"
+    "gambit-question-service": "https://github.com/revalution/gambit-question-service.git",
+    "gambit-location-service": "https://github.com/revalution/gambit-location-service.git"
   }
 }
