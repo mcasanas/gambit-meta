@@ -87,8 +87,8 @@ services:
       driver: "fluentd"
       options:
         tag: gambit
-  buckets:
-    image: gambit/gambit-bucket-service
+  question-buckets:
+    image: gambit/gambit-question-bucket-service
     ports:
     - 10006:10006
     environment:
