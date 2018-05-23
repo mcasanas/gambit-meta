@@ -12,6 +12,10 @@ services:
     environment:
     - EUREKA_HOME=http://localhost:8761/eureka
     - CONFIG_HOME=http://config:8888
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   config:
     image: gambit/gambit-configuration-service
     ports:
@@ -20,6 +24,10 @@ services:
     - CONFIG_REPO_URL=https://github.com/palagnajr/gambit-configuration.git
     - CONFIG_REPO_USERNAME=revature-github
     - CONFIG_REPO_PASSWORD=p4ssw0rd
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   zuul:
     image: gambit/gambit-gateway-service
     ports:
@@ -27,6 +35,10 @@ services:
     environment:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   user:
     image: gambit/gambit-user-service
     ports:
@@ -35,6 +47,10 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   batch:
     image: gambit/gambit-batch-service
     ports:
@@ -43,6 +59,10 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   skills:
     image: gambit/gambit-skill-service
     ports:
@@ -51,6 +71,10 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   questions:
     image: gambit/gambit-question-service
     ports:
@@ -59,6 +83,10 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   question-buckets:
     image: gambit/gambit-question-bucket-service
     ports:
@@ -67,6 +95,10 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
   screening:
     image: gambit/gambit-screening-service
     ports:
@@ -75,6 +107,11 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+
   location:
     image: gambit/gambit-location-service
     ports:
@@ -83,3 +120,74 @@ services:
     - EUREKA_HOME=http://eureka:8761/eureka
     - CONFIG_HOME=http://config:8888
     - KAFKA_URL=ec2-35-182-41-35.ca-central-1.compute.amazonaws.com:9092
+    logging:
+      driver: "fluentd"
+      options:
+        tag: gambit
+
+    
+  #Logging
+  fluentd:
+    image: captgriz/myfluentd
+    volumes:
+      - ~/logs:/fluentd/log
+    ports:
+      - "24224:24224"
+    deploy:
+      restart_policy:
+           condition: on-failure
+           delay: 20s
+           max_attempts: 3
+           window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    logging:
+        driver: "json-file"
+        options:
+          max-size: 10M
+          max-file: "1"  
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s 
+      
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
+    logging:
+        driver: "json-file"
+        options:
+           max-size: 10M
+           max-file: "1"        
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        delay: 2s
