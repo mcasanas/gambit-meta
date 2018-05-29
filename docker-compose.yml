@@ -21,7 +21,7 @@ services:
     ports:
     - 8888:8888
     environment:
-    - CONFIG_REPO_URL=https://github.com/palagnajr/gambit-configuration.git
+    - CONFIG_REPO_URL==https://gitlab.com/revalution/gambit-configuration.git
     - CONFIG_REPO_USERNAME=revature-github
     - CONFIG_REPO_PASSWORD=p4ssw0rd
     logging:
